@@ -18,7 +18,19 @@ from a phone — no Unity Editor required at any point.
 - **Builds happen on GitHub Actions**, not locally, using
   [game-ci/unity-builder](https://game.ci/docs/github/getting-started).
 
-## One-time setup (do this once)
+## Two builds live in this repo
+
+- **`android/`** — a native Android port of the same game (software raycaster,
+  no engine). It needs no Unity and no license, builds in about ten seconds
+  with the plain SDK tools, and is what the **Build Native APK** workflow
+  produces. Run it yourself with `ANDROID_SDK_ROOT=... ./android/build.sh`.
+- **`Assets/`** — the original Unity project, below. It still needs a Unity
+  licence, which is the part Unity has made awkward (see setup).
+
+`android/tools/RenderProbe.java` drives the shipping renderer on a desktop JVM
+and writes frames as PNGs, so the visuals can be checked without a device.
+
+## One-time setup for the Unity build (do this once)
 
 1. Push this whole folder to a new GitHub repo.
 2. You need a free Unity Personal license activated as a GitHub secret. Unity
