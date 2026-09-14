@@ -18,22 +18,40 @@ from a phone — no Unity Editor required at any point.
 - **Builds happen on GitHub Actions**, not locally, using
   [game-ci/unity-builder](https://game.ci/docs/github/getting-started).
 
-## One-time setup (do this once)
+## Two builds live in this repo
+
+- **`android/`** — a native Android port of the same game (software raycaster,
+  no engine). It needs no Unity and no license, builds in about ten seconds
+  with the plain SDK tools, and is what the **Build Native APK** workflow
+  produces. Run it yourself with `ANDROID_SDK_ROOT=... ./android/build.sh`.
+- **`Assets/`** — the original Unity project, below. It still needs a Unity
+  licence, which is the part Unity has made awkward (see setup).
+
+`android/tools/RenderProbe.java` drives the shipping renderer on a desktop JVM
+and writes frames as PNGs, so the visuals can be checked without a device.
+
+## One-time setup for the Unity build (do this once)
 
 1. Push this whole folder to a new GitHub repo.
-2. You need a free Unity Personal license activated as a GitHub secret,
-   since there's no local Editor to activate one from directly:
-   - Go to the repo's **Actions** tab → **Request Unity Activation File** →
-     **Run workflow** (uses Unity 2022.3.62f2).
-   - When it finishes, download the `unity-activation-file` artifact — it's a
-     `.alf` file.
-   - Go to https://license.unity3d.com/manual and upload that `.alf` file.
-     Unity will email you back a `.ulf` license file.
+2. You need a free Unity Personal license activated as a GitHub secret. Unity
+   has retired the old automated/manual `.alf` → `.ulf` activation flow for
+   Personal licenses, so this one step needs a brief hands-on-a-computer
+   session (Unity Hub only — you don't need the full Editor, and you can
+   uninstall it right after):
+   - On any Windows/Mac/Linux computer, install **Unity Hub** from
+     https://unity.com/download.
+   - Open Unity Hub and sign in with your Unity ID (create one free if you
+     don't have one). This activates your Personal license locally.
+   - Copy the license file Unity Hub just created:
+     - Windows: `C:\ProgramData\Unity\Unity_lic.ulf`
+     - macOS: `/Library/Application Support/Unity/Unity_lic.ulf`
+     - Linux: `/usr/share/unity3d/Unity_lic.ulf`
    - In your repo, go to **Settings → Secrets and variables → Actions** and add:
-     - `UNITY_LICENSE` — the full contents of the `.ulf` file you got back
+     - `UNITY_LICENSE` — the full contents of that `.ulf` file
      - `UNITY_EMAIL` — your Unity account email
      - `UNITY_PASSWORD` — your Unity account password
-3. Delete/disable the activation workflow if you like — you only need it once.
+3. That's it — every build after this runs headlessly from GitHub Actions,
+   no Editor or manual license step needed again.
 
 ## Building the game
 
